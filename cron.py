@@ -5,7 +5,7 @@ import os
 import time
 import json
 base_path = os.getcwd()
-print(base_path)
+# print(base_path)
 path_session = os.path.join(base_path, 'session.json')
 path_length = os.path.join(base_path, 'length.json')
 
@@ -20,7 +20,7 @@ tele_bot_token = os.getenv("TELE_BOT_TOKEN")
 fonte_token = os.getenv("FONTE_TOKEN")
 group_wa = os.getenv("GROUP_WA")
 time_reload = 5
-send_wa = False
+send_wa = True
 current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 param = {
@@ -29,7 +29,7 @@ param = {
     "params": {
         "model": "stock.picking",
         "domain": [["picking_type_id", "=", 2]],
-        "fields": ["name", "x_studio_no_do_manual", "date", "scheduled_date", "force_date", "partner_id", "location_dest_id", "location_id", "origin", "x_studio_tags", "x_studio_field_0rSR5", "priority_so", "note_to_wh", "note_itr", "invoice_state", "group_id", "backorder_id", "state", "priority", "picking_type_id"],
+        "fields": ["name", "x_studio_no_do_manual", "date", "scheduled_date", "force_date", "partner_id", "location_dest_id", "location_id", "origin", "x_studio_tags", "x_studio_field_0rSR5", "priority_so", "note_to_wh", "note_itr", "invoice_state", "group_id", "backorder_id", "state", "priority", "picking_type_id", "sale_id"],
         "limit": 80,
         "sort": "",
         "context": {
@@ -114,89 +114,10 @@ def get_headers():
     return headers
 
         
-def get_file_so(so_number):
+def get_file_so(id_so):
     try :
         headers = get_headers()
-        param_search_so = {
-                "jsonrpc": "2.0",
-                "method": "call",
-                "params": {
-                    "model": "sale.order",
-                    "domain": [
-                        "|",
-                        "|",
-                        [
-                            "name",
-                            "ilike",
-                            so_number
-                        ],
-                        [
-                            "client_order_ref",
-                            "ilike",
-                            so_number
-                        ],
-                        [
-                            "partner_id",
-                            "child_of",
-                            so_number
-                        ]
-                    ],
-                    "fields": [
-                        "message_needaction",
-                        "name",
-                        "date_order",
-                        "commitment_date",
-                        "expected_date",
-                        "partner_id",
-                        "partner_invoice_id",
-                        "user_id",
-                        "no_aks",
-                        "no_po",
-                        "delivery_count",
-                        "invoice_count",
-                        "amount_untaxed",
-                        "amount_discount",
-                        "amount_tax",
-                        "amount_total",
-                        "currency_id",
-                        "state",
-                        "approve_nego",
-                        "tingkat_approve",
-                        "approve_id",
-                        "option",
-                        "total_nego_order",
-                        "total_nego_item",
-                        "total_dpk",
-                        "invoice_status",
-                        "no_invoice",
-                        "no_delivery_order",
-                        "warna",
-                        "is_green",
-                        "is_yellow",
-                        "is_red"
-                    ],
-                    "limit": 10,
-                    "sort": "",
-                    "context": {
-                        "lang": "en_US",
-                        "tz": "GMT",
-                        "uid": 192,
-                        "params": {
-                            "id": 12508,
-                            "action": 338,
-                            "model": "sale.order",
-                            "view_type": "form",
-                            "menu_id": 211
-                        },
-                        "search_default_my_quotation": 1
-                    }
-                },
-                "id": 399625602
-            }
-        url_search_so = base_url_odoo + '/web/dataset/search_read'
         url_print_so = base_url_odoo + '/web/dataset/call_button'
-        response = requests.post(url=url_search_so, headers=headers, json=param_search_so)
-        id_so = response.json()['result']['records'][0]['id']
         param_print_So = {
             "jsonrpc": "2.0",
             "method": "call",
@@ -255,7 +176,7 @@ def main():
         print('Jumlah berubah! kirim notif!')
         text = '===New ' + str(selisih) + ' DO!===\n\n'
         for i in range(selisih):
-            file = get_file_so(str(result['result']['records'][i]['group_id'][1]))
+            file = get_file_so(result['result']['records'][i]['sale_id'][0])
             text += str(i+1) +". DO : " + str(result['result']['records'][i]['name'])
             text += "\nSO : " + str(result['result']['records'][i]['group_id'][1])
             text += "\nTO : " + str(result['result']['records'][i]['partner_id'][1])
