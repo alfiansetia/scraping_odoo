@@ -19,6 +19,7 @@ tele_group_id = os.getenv("TELE_GROUP_ID")
 tele_bot_token = os.getenv("TELE_BOT_TOKEN")
 fonte_token = os.getenv("FONTE_TOKEN")
 group_wa = os.getenv("GROUP_WA")
+url_backend_file = os.getenv("URL_BACKEND_FILE")
 time_reload = 5
 send_wa = True
 current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -176,12 +177,11 @@ def main():
         print('Jumlah berubah! kirim notif!')
         text = '===New ' + str(selisih) + ' DO!===\n\n'
         for i in range(selisih):
-            file = get_file_so(result['result']['records'][i]['sale_id'][0])
+            url_file = url_backend_file + '/printso/' + str(result['result']['records'][i]['sale_id'][0])
             text += str(i+1) +". DO : " + str(result['result']['records'][i]['name'])
             text += "\nSO : " + str(result['result']['records'][i]['group_id'][1])
             text += "\nTO : " + str(result['result']['records'][i]['partner_id'][1])
-            if(file != ''):
-                text += "\nFILE : " + file
+            text += "\nFILE : " + url_file
             if selisih <= 3:
                 text += "\nNote : " + str(result['result']['records'][i]['note_to_wh'])
             text += '\n'
