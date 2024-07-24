@@ -1,0 +1,7 @@
+.vscode/settings.json
+.env
+/json/*
+.txt
+output.txt
+length.json
+session.json
