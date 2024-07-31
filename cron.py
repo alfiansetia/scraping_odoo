@@ -23,6 +23,7 @@ group_wa = os.getenv("GROUP_WA")
 url_backend_file = os.getenv("URL_BACKEND_FILE")
 time_reload = 5
 send_wa = True
+send_file = False
 current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 param = {
@@ -182,7 +183,8 @@ def main():
             text += str(i+1) +". DO : " + str(result['result']['records'][i]['name'])
             text += "\nSO : " + str(result['result']['records'][i]['group_id'][1])
             text += "\nTO : " + str(result['result']['records'][i]['partner_id'][1])
-            text += "\nFILE : " + url_file
+            if(send_file):
+                text += "\nFILE : " + url_file
             if selisih <= 3:
                 text += "\nNote : " + str(result['result']['records'][i]['note_to_wh'])
             text += '\n'
