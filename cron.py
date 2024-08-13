@@ -22,7 +22,7 @@ fonte_token = os.getenv("FONTE_TOKEN")
 group_wa = os.getenv("GROUP_WA")
 url_backend_file = os.getenv("URL_BACKEND_FILE")
 time_reload = 5
-send_wa = False
+send_wa = True
 send_file = False
 current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
