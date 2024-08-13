@@ -22,7 +22,7 @@ fonte_token = os.getenv("FONTE_TOKEN")
 group_wa = os.getenv("GROUP_WA")
 url_backend_file = os.getenv("URL_BACKEND_FILE")
 time_reload = 5
-send_wa = True
+send_wa = False
 send_file = False
 current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
@@ -49,7 +49,6 @@ param = {
             "search_disable_custom_filters": True
         }
     },
-    "id": 613867950
 }
 
 def send_wa_message(message):
@@ -179,11 +178,11 @@ def main():
         print('Jumlah berubah! kirim notif!')
         text = '===New ' + str(selisih) + ' DO!===\n\n'
         for i in range(selisih):
-            url_file = url_backend_file + '/printso/' + str(result['result']['records'][i]['sale_id'][0])
             text += str(i+1) +". DO : " + str(result['result']['records'][i]['name'])
             text += "\nSO : " + str(result['result']['records'][i]['group_id'][1])
             text += "\nTO : " + str(result['result']['records'][i]['partner_id'][1])
-            if(send_file):
+            if(send_file and result['result']['records'][i]['sale_id'] != False):
+                url_file = url_backend_file + '/printso/' + str(result['result']['records'][i]['sale_id'][0])
                 text += "\nFILE : " + url_file
             if selisih <= 3:
                 text += "\nNote : " + str(result['result']['records'][i]['note_to_wh'])
@@ -200,10 +199,10 @@ def main():
 
 if __name__ == "__main__":
     main_length = read_length_from_file()
-    try:
-        main()
-    except Exception as e:
-        write_length_to_file(main_length)
-        ter = "Error: " + str(e)
-        print(ter)
-        send_telegram_message('===Program Error!===\n'+ ter)
+    # try:
+    main()
+    # except Exception as e:
+    #     write_length_to_file(main_length)
+    #     ter = "Error: " + str(e)
+    #     print(ter)
+    #     send_telegram_message('===Program Error!===\n'+ ter)
