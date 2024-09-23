@@ -10,6 +10,13 @@
 0 13 * * * cd /home/user/scraping_odoo && /usr/bin/python3 /home/user/scraping_odoo/login.py >> /home/user/scraping_odoo/login.log 2>&1
 ```
 
+## Empty file log
+
+```
+sudo echo "" > cron.log
+sudo echo "" > login.log
+```
+
 ## Library
 
 | Library        | How To Install             |
