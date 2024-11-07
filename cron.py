@@ -178,13 +178,14 @@ def main():
         print('Jumlah berubah! kirim notif!')
         text = '===New ' + str(selisih) + ' DO!===\n\n'
         for i in range(selisih):
+            # print(result['result']['records'][i]['name'])
             text += str(i+1) +". DO : " + str(result['result']['records'][i]['name'])
-            text += "\nSO : " + str(result['result']['records'][i]['group_id'][1])
-            text += "\nTO : " + str(result['result']['records'][i]['partner_id'][1])
-            if(send_file and result['result']['records'][i]['sale_id'] != False):
-                url_file = url_backend_file + '/printso/' + str(result['result']['records'][i]['sale_id'][0])
-                text += "\nFILE : " + url_file
-            if selisih <= 3:
+            text += "\nSO : " + str(result['result']['records'][i]['group_id'][1] if result['result']['records'][i]['group_id'] and len(result['result']['records'][i]['group_id']) > 1 else '')
+            text += "\nTO : " + str(result['result']['records'][i]['partner_id'][1] if result['result']['records'][i]['partner_id'] and len(result['result']['records'][i]['partner_id']) > 1 else '')
+            # if(send_file and result['result']['records'][i]['sale_id'] != False):
+            #     url_file = url_backend_file + '/printso/' + str(result['result']['records'][i]['sale_id'][0])
+            #     text += "\nFILE : " + url_file
+            if selisih <= 5:
                 text += "\nNote : " + str(result['result']['records'][i]['note_to_wh'])
             text += '\n'
         send_telegram_message(text)
@@ -205,4 +206,4 @@ if __name__ == "__main__":
         write_length_to_file(main_length)
         ter = "Error: " + str(e)
         print(ter)
-        # send_telegram_message('===Program Error!===\n'+ ter)
+        send_telegram_message('===Program Error!===\n'+ ter)
