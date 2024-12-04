@@ -176,23 +176,26 @@ def main():
         length = new_length
         write_length_to_file(length)
         print('Jumlah berubah! kirim notif!')
-        text = '===New ' + str(selisih) + ' DO!===\n\n'
+        text = '⚠️New ' + str(selisih) + ' DO!⚠️\n\n'
         for i in range(selisih):
             # print(result['result']['records'][i]['name'])
-            text += str(i+1) +". DO : " + str(result['result']['records'][i]['name'])
-            text += "\nSO : " + str(result['result']['records'][i]['group_id'][1] if result['result']['records'][i]['group_id'] and len(result['result']['records'][i]['group_id']) > 1 else '')
-            text += "\nTO : " + str(result['result']['records'][i]['partner_id'][1] if result['result']['records'][i]['partner_id'] and len(result['result']['records'][i]['partner_id']) > 1 else '')
+            text += str('🟢')+str(i+1) +". DO : " + str(result['result']['records'][i]['name'])
+            text += "\n🟢SO : *" + str(result['result']['records'][i]['group_id'][1] if result['result']['records'][i]['group_id'] and len(result['result']['records'][i]['group_id']) > 1 else '') + '*'
+            text += "\n🟢TO : " + str(result['result']['records'][i]['partner_id'][1] if result['result']['records'][i]['partner_id'] and len(result['result']['records'][i]['partner_id']) > 1 else '')
             # if(send_file and result['result']['records'][i]['sale_id'] != False):
             #     url_file = url_backend_file + '/printso/' + str(result['result']['records'][i]['sale_id'][0])
             #     text += "\nFILE : " + url_file
             if selisih <= 5:
-                text += "\nNote : " + str(result['result']['records'][i]['note_to_wh'])
-            text += '\n'
+                text += "\n🟢Note : \n"
+                note = result['result']['records'][i]['note_to_wh']
+                formatted_note = '\n'.join(f"> {line}" for line in note.splitlines() if line.strip())
+                text += formatted_note
+            text += '\n\n'
         send_telegram_message(text)
         if(send_wa):
             send_wa_message(text)
     if selisih >= 10:
-        t = 'New '+ str(length) +' DO!, More Than 10! '
+        t = '⚠️New '+ str(length) +' DO!, More Than 10! '
         send_telegram_message(t)
         if(send_wa):
             send_wa_message(t)
