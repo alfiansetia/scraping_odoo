@@ -218,7 +218,7 @@ def main():
 
 if __name__ == "__main__":
     main_length = read_length_from_file()
-    err_length = read_error_from_file
+    err_length = read_error_from_file()
     try:
         main()
         write_error_to_file(0)
