@@ -6,3 +6,4 @@ output.txt
 length.json
 session.json
 cron.log
+error.json

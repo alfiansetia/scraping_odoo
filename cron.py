@@ -8,6 +8,7 @@ base_path = os.getcwd()
 # print(base_path)
 path_session = os.path.join(base_path, 'session.json')
 path_length = os.path.join(base_path, 'length.json')
+path_error = os.path.join(base_path, 'error.json')
 
 dotenv_path = os.path.join(base_path, '.env')
 
@@ -103,6 +104,20 @@ def read_length_from_file():
 def write_length_to_file(length):
     with open(path_length, 'w') as file:
         json.dump({'length': length}, file)
+
+def read_error_from_file():
+    try:
+        with open(path_error, 'r') as file:
+            data = json.load(file)
+            return data.get('error', 0)
+    except IOError:
+        return 0
+
+def write_error_to_file(error):
+    with open(path_error, 'w') as file:
+        json.dump({'error': error}, file)
+
+
 
 def get_headers():
     session_id = read_session_from_file()
@@ -203,10 +218,15 @@ def main():
 
 if __name__ == "__main__":
     main_length = read_length_from_file()
+    err_length = read_error_from_file
     try:
         main()
+        write_error_to_file(0)
     except Exception as e:
+        err_add = err_length+1
+        write_error_to_file(err_add)
         write_length_to_file(main_length)
         ter = "Error: " + str(e)
         print(ter)
-        send_telegram_message('===Program Error!===\n'+ ter)
+        if(err_add < 5):
+            send_telegram_message('===Program Error!===\n'+ ter)
