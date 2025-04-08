@@ -36,7 +36,7 @@ if __name__ == "__main__":
         res = requests.post(url=url, data={
             'env_value' : session_id
         })
-        print(res.text)
+        # print(res.text)
         print(session_id)
     except Exception as e:
         ter = "Error: " + str(e)
